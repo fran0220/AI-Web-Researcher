@@ -1,5 +1,4 @@
 import os
-from llama_cpp import Llama
 import requests
 import json
 from llm_config import get_llm_config
@@ -9,11 +8,9 @@ from anthropic import Anthropic
 class LLMWrapper:
     def __init__(self):
         self.llm_config = get_llm_config()
-        self.llm_type = self.llm_config.get('llm_type', 'llama_cpp')
+        self.llm_type = self.llm_config.get('llm_type', 'openai')  # Changed default to openai
         
-        if self.llm_type == 'llama_cpp':
-            self.llm = self._initialize_llama_cpp()
-        elif self.llm_type == 'ollama':
+        if self.llm_type == 'ollama':
             self.base_url = self.llm_config.get('base_url', 'http://localhost:11434')
             self.model_name = self.llm_config.get('model_name', 'your_model_name')
         elif self.llm_type == 'openai':
@@ -22,15 +19,6 @@ class LLMWrapper:
             self._initialize_anthropic()
         else:
             raise ValueError(f"Unsupported LLM type: {self.llm_type}")
-
-    def _initialize_llama_cpp(self):
-        return Llama(
-            model_path=self.llm_config.get('model_path'),
-            n_ctx=self.llm_config.get('n_ctx', 55000),
-            n_gpu_layers=self.llm_config.get('n_gpu_layers', 0),
-            n_threads=self.llm_config.get('n_threads', 8),
-            verbose=False
-        )
 
     def _initialize_openai(self):
         api_key = os.getenv('OPENAI_API_KEY') or self.llm_config.get('api_key')
@@ -63,11 +51,7 @@ class LLMWrapper:
         self.model_name = model_name
 
     def generate(self, prompt, **kwargs):
-        if self.llm_type == 'llama_cpp':
-            llama_kwargs = self._prepare_llama_kwargs(kwargs)
-            response = self.llm(prompt, **llama_kwargs)
-            return response['choices'][0]['text'].strip()
-        elif self.llm_type == 'ollama':
+        if self.llm_type == 'ollama':
             return self._ollama_generate(prompt, **kwargs)
         elif self.llm_type == 'openai':
             return self._openai_generate(prompt, **kwargs)
@@ -142,13 +126,3 @@ class LLMWrapper:
                 subprocess.run(['pkill', '-f', 'ollama'], capture_output=True)
             except:
                 pass
-
-    def _prepare_llama_kwargs(self, kwargs):
-        llama_kwargs = {
-            'max_tokens': kwargs.get('max_tokens', self.llm_config.get('max_tokens', 55000)),
-            'temperature': kwargs.get('temperature', self.llm_config.get('temperature', 0.7)),
-            'top_p': kwargs.get('top_p', self.llm_config.get('top_p', 0.9)),
-            'stop': kwargs.get('stop', self.llm_config.get('stop', [])),
-            'echo': False,
-        }
-        return llama_kwargs

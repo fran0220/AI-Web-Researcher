@@ -1,4 +1,3 @@
-llama-cpp-python
 duckduckgo-search
 colorama
 requests
@@ -13,3 +12,5 @@ openai>=1.0.0
 anthropic>=0.7.0
 tavily-python
 exa-py
+flask
+python-dotenv

@@ -1,4 +1,9 @@
 # llm_config.py
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 LLM_TYPE = "openai"  # Options: 'ollama', 'openai', 'anthropic' (careful API calls will cost a lot if your actually using ChatGPT)
 
@@ -34,8 +39,8 @@ LLM_CONFIG_OLLAMA = {
 # LLM settings for OpenAI be careful API calls will cost a lot if your actually using ChatGPT
 LLM_CONFIG_OPENAI = {
     "llm_type": "openai",
-    "api_key": "",  # Set via environment variable OPENAI_API_KEY
-    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",  # Aliyun's API endpoint
+    "api_key": os.getenv("OPENAI_API_KEY"),  # Get API key from environment variable
+    "base_url": os.getenv("OPENAI_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1"),  # Get base URL from environment variable
     "model_name": "qwen-max",  # Using Qwen-Max model
     "messages": [],  # Placeholder for conversation history
     "temperature": 0.7,
@@ -49,8 +54,8 @@ LLM_CONFIG_OPENAI = {
 # LLM settings for Anthropic
 LLM_CONFIG_ANTHROPIC = {
     "llm_type": "anthropic",
-    "api_key": "",  # Set via environment variable ANTHROPIC_API_KEY
-    "model_name": "claude-3-5-sonnet-latest",  # Required: Specify the model to use
+    "api_key": os.getenv("ANTHROPIC_API_KEY", ""),  # Get API key from environment variable
+    "model_name": "claude-3-sonnet-20240229",  # Updated to latest Claude model
     "temperature": 0.7,
     "top_p": 0.9,
     "max_tokens": 4096,
@@ -63,8 +68,16 @@ def get_llm_config():
     elif LLM_TYPE == "ollama":
         return LLM_CONFIG_OLLAMA
     elif LLM_TYPE == "openai":
-        return LLM_CONFIG_OPENAI
+        config = LLM_CONFIG_OPENAI.copy()
+        # Ensure API key is set
+        if not config["api_key"]:
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
+        return config
     elif LLM_TYPE == "anthropic":
-        return LLM_CONFIG_ANTHROPIC
+        config = LLM_CONFIG_ANTHROPIC.copy()
+        # Ensure API key is set
+        if not config["api_key"]:
+            raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
+        return config
     else:
         raise ValueError(f"Invalid LLM_TYPE: {LLM_TYPE}")
