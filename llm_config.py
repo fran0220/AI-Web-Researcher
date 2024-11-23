@@ -1,6 +1,6 @@
 # llm_config.py
 
-LLM_TYPE = "ollama"  # Options: 'ollama', 'openai', 'anthropic' (careful API calls will cost a lot if your actually using ChatGPT)
+LLM_TYPE = "openai"  # Options: 'ollama', 'openai', 'anthropic' (careful API calls will cost a lot if your actually using ChatGPT)
 
 # LLM settings for llama_cpp DOESN'T WORK 
 MODEL_PATH = "/home/james/llama.cpp/models/gemma-2-9b-it-Q6_K.gguf" # Replace with your llama.cpp models filepath
@@ -35,8 +35,8 @@ LLM_CONFIG_OLLAMA = {
 LLM_CONFIG_OPENAI = {
     "llm_type": "openai",
     "api_key": "",  # Set via environment variable OPENAI_API_KEY
-    "base_url": None,  # Optional: Set to use alternative OpenAI-compatible endpoints
-    "model_name": "gpt-4o",  # Required: Specify the model to use
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",  # Aliyun's API endpoint
+    "model_name": "qwen-max",  # Using Qwen-Max model
     "messages": [],  # Placeholder for conversation history
     "temperature": 0.7,
     "top_p": 0.9,

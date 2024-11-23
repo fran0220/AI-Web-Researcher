@@ -1,5 +1,53 @@
 # Automated-AI-Web-Researcher-Ollama
 
+## Quick Start Guide
+
+### 1. Environment Setup
+```bash
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+# On Linux/Mac:
+source venv/bin/activate
+# On Windows:
+# .\venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Configuration
+Create a `.env` file in the project root with your API keys:
+```env
+# API Keys Configuration
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_API_BASE=your_api_base_url  # Optional: For OpenAI API compatible endpoints
+
+# Search Provider API Keys (optional)
+TAVILY_API_KEY=your_tavily_key
+BRAVE_API_KEY=your_brave_key
+BING_API_KEY=your_bing_key
+EXA_API_KEY=your_exa_key
+```
+Note: If no search provider keys are provided, DuckDuckGo will be used as fallback.
+
+### 3. Running the Application
+```bash
+# Method 1: Direct run (make sure your environment variables are set)
+python Web-LLM.py
+
+# Method 2: Using the provided script (automatically loads .env file)
+chmod +x run.sh
+./run.sh
+```
+
+### Usage
+- Start your research query with '@'
+  Example: "@analyze the impact of AI on healthcare"
+- Press CTRL+D (Linux/Mac) or CTRL+Z (Windows) to submit input
+- The research results will be saved automatically in a text file
+
 ## Description
 Automated-AI-Web-Researcher is an innovative research assistant that leverages locally-run large language models through Ollama to conduct thorough, automated online research on any given topic or question. Unlike traditional LLM interactions, this tool actually performs structured research by breaking down queries into focused research areas, systematically investigating via web searching and then scraping of relevant websites each area, and compiling it's findings all saved automatically into a text document with all content found and links for the source of each, and whenever you want it to stop it's research you can input a command which then results in the research terminating and the LLM reviewing all the content it found and providing a comprehensive final summary to your original topic or question, and then you can also ask the LLM questions about it's research findings if you would like.
 
