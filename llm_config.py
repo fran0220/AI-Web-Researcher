@@ -41,11 +41,11 @@ LLM_CONFIG_OPENAI = {
     "llm_type": "openai",
     "api_key": os.getenv("OPENAI_API_KEY"),  # Get API key from environment variable
     "base_url": os.getenv("OPENAI_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1"),  # Get base URL from environment variable
-    "model_name": "qwen-max",  # Using Qwen-Max model
+    "model_name": "qwen-long",  # Using Qwen-Long model for better cost efficiency
     "messages": [],  # Placeholder for conversation history
     "temperature": 0.7,
     "top_p": 0.9,
-    "max_tokens": 32000,
+    "max_tokens": 32000,  # Qwen-Long supports 32K context window
     "stop": ["User:", "\n\n"],
     "presence_penalty": 0,
     "frequency_penalty": 0
